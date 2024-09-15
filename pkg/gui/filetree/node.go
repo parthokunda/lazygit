@@ -17,6 +17,10 @@ type Node[T any] struct {
 	// If the node is a directory, Children contains the contents of the directory,
 	// otherwise it's nil.
 	Children []*Node[T]
+	
+	// every child node is accessibe using their path string. Giving O(1) lookup
+	// for their given their path
+	ChildrenPathMap map[string]*Node[T]
 
 	// path of the file/directory
 	Path string

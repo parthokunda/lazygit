@@ -23,18 +23,28 @@ func BuildTreeFromFiles(files []*models.File) *Node[models.File] {
 			}
 
 			path := join(splitPath[:i+1])
-			for _, existingChild := range curr.Children {
-				if existingChild.Path == path {
-					curr = existingChild
-					continue outer
-				}
+			// for _, existingChild := range curr.Children {
+			// 	if existingChild.Path == path {
+			// 		curr = existingChild
+			// 		continue outer
+			// 	}
+			// }
+			child, isFound := curr.ChildrenPathMap[path]
+			if isFound {
+				curr = child
+				continue outer
 			}
 
 			newChild := &Node[models.File]{
 				Path: path,
 				File: setFile,
+				// parthomap: make(map[string]*Node[models.File]),
 			}
 			curr.Children = append(curr.Children, newChild)
+			if (curr.ChildrenPathMap == nil) {
+				curr.ChildrenPathMap = make(map[string]*Node[models.File])
+			}
+			curr.ChildrenPathMap[path] = newChild
 
 			curr = newChild
 		}
